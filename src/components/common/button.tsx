@@ -1,6 +1,7 @@
 import { VariantProps, cva } from 'class-variance-authority'
 import { cn } from '@/utils/cn'
 import { forwardRef } from 'react'
+import Link from 'next/link'
 
 const buttonVariants = cva(
   `focus-visible:ring-ring inline-flex h-9 
@@ -14,7 +15,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: 'bg-primary text-white',
-        secondary: 'bg-white hover:opacity-95 text-primary',
+        secondary: 'bg-white text-primary hover:opacity-95',
         warning: 'bg-warning text-white',
         danger: 'bg-red-500 text-white'
       },
@@ -38,12 +39,33 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, loading = false, variant = 'default', ...props }, ref) => {
     return (
       <button
+        {...props}
         ref={ref}
         className={cn(buttonVariants({ variant, loading }), className)}
-        {...props}
       />
     )
   }
 )
 
 export default Button
+
+interface LinkButtonProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
+    VariantProps<typeof buttonVariants> {
+  loading?: boolean
+  href: string
+}
+
+const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
+  ({ className, loading = false, variant = 'default', ...props }, ref) => {
+    return (
+      <Link
+        {...props}
+        ref={ref}
+        className={cn(buttonVariants({ variant, loading }), className)}
+      />
+    )
+  }
+)
+
+export { LinkButton }
