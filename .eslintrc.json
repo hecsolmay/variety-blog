@@ -1,3 +1,20 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "indent": ["error", 2],
+    "react/react-in-jsx-scope": "off",
+    "no-custom-classname": "off",
+    "tailwindcss/no-custom-classname": "off",
+    "semi": ["error", "never"],
+    "comma-dangle": ["error", "never"],
+    "no-extra-semi": "error",
+    "quotes": ["error", "single"],
+    "no-unused-vars": "warn", // Turned off to be handled by @typescript-eslint/no-unused-vars
+    "space-before-function-paren": ["error", "always"],
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "no-trailing-spaces": "error",
+    "eol-last": ["error", "always"],
+    "object-curly-spacing": ["error", "always"],
+    "array-bracket-spacing": ["error", "never"]
+  }
 }
