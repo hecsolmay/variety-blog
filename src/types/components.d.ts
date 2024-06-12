@@ -5,6 +5,7 @@ export interface InputProps
 export interface CommonInputProps extends InputProps {
   register?: any
   error?: string
+  hasError?: boolean
 }
 export interface LabelProps extends React.HTMLAttributes<HTMLLabelElement> {}
 export interface SpanProps extends React.HTMLAttributes<HTMLSpanElement> {}
