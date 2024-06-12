@@ -4,13 +4,8 @@ import { userLinks } from '@/constants/links'
 import { getSession } from '@/utils/auth'
 import Link from 'next/link'
 
-type User = {
-  username: string
-  profileImage: string
-}
-
 export async function NavigationAuthItem () {
-  const session: User | null = await getSession()
+  const session = await getSession()
 
   if (session) {
     return (
@@ -25,7 +20,7 @@ export async function NavigationAuthItem () {
 }
 
 interface UserDropdownProps {
-  profileImage: string
+  profileImage: string | null
   userName: string
 }
 
@@ -35,7 +30,7 @@ export function UserDropdown ({ profileImage, userName }: UserDropdownProps) {
       dropdownTrigger={
         <div className='inline-flex items-center gap-2'>
           <img
-            src={profileImage}
+            src={profileImage ?? '/assets/images/user-avatar.webp'}
             className='size-8 rounded-full'
             alt={`Foto de perfil de ${userName}`}
           />
