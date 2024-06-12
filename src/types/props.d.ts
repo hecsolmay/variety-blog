@@ -6,7 +6,9 @@ interface SearchParams {
   q?: string
 }
 
-interface Params {}
+interface Params {
+  id: string
+}
 
 export interface ServerPageProps {
   searchParams: SearchParams
