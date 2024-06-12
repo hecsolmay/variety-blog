@@ -3,7 +3,7 @@ export const MESSAGES = {
   MIN_USERNAME_LENGTH: 'El nombre del usuario debe tener al menos 3 caracteres',
   MAX_USERNAME_LENGTH:
     'El nombre del usuario debe tener al menos 20 caracteres',
-  PASSWORD_LENGTH: 'La contraseña debe tener al menos 8 caracteres',
+  PASSWORD_LENGTH: 'La contraseña debe tener al menos 6 caracteres',
   MAX_EMAIL_LENGTH: 'El email debe tener menos de 254 caracteres',
   EMAIL_FORMAT: 'El email debe ser válido',
   PASSWORD_CONFIRMATION: 'Las contraseñas no coinciden',

@@ -17,11 +17,11 @@ export const registerSchema = z
     password: z
       .string(DEFAULT_STRING_MESSAGE)
       .trim()
-      .min(8, { message: MESSAGES.PASSWORD_LENGTH }),
+      .min(6, { message: MESSAGES.PASSWORD_LENGTH }),
     confirmPassword: z
       .string(DEFAULT_STRING_MESSAGE)
       .trim()
-      .min(8, { message: MESSAGES.PASSWORD_LENGTH })
+      .min(6, { message: MESSAGES.PASSWORD_LENGTH })
   })
   .refine(data => data.password === data.confirmPassword, {
     message: MESSAGES.PASSWORD_CONFIRMATION,
