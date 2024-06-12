@@ -7,14 +7,12 @@ import { Suspense } from 'react'
 export default function Navbar () {
   return (
     <header className='sticky left-0 top-0 z-10 flex h-20 w-full items-center justify-between bg-white px-4'>
-      <div className='grid flex-1 place-content-center md:block md:flex-none'>
-        <Link href='/' className='inline-flex items-center'>
-          <LogoIcon className='h-8 w-auto' />
-          <span className='mt-1 hidden text-2xl font-semibold text-primary md:block'>
+      <Link href='/' className='inline-flex items-center'>
+        <LogoIcon className='h-8 w-auto' />
+        <span className='mt-1 hidden text-2xl font-semibold text-primary md:block'>
             ariety blog
-          </span>
-        </Link>
-      </div>
+        </span>
+      </Link>
 
       <div className='flex items-center'>
         <Suspense fallback={<NavigationAuthItemFallback />}>

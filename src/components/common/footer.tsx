@@ -2,7 +2,7 @@ import { GithubIcon } from '@/components/icons/github'
 
 export default function Footer () {
   return (
-    <footer className='flex h-20 w-full items-center justify-between bg-primary px-4 text-white'>
+    <footer className='flex h-20 w-full flex-wrap items-center justify-between gap-2 bg-primary px-4 text-white'>
       <div className='grid flex-1 place-content-center md:block md:flex-none'>
         <p className='text-sm md:text-base'>Copyright © 2022 Variety blog</p>
       </div>
