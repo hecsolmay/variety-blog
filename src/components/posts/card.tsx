@@ -16,7 +16,7 @@ export default function PostCard ({ post }: PostCardProps) {
 
   return (
     <div className='group overflow-hidden rounded-lg shadow-lg'>
-      <Link href={`/${author.id}/${id}`}>
+      <Link href={`/authors/${author.id}/${id}`}>
         <img
           className='h-48 w-full rounded-t-lg object-cover transition-transform duration-100 group-hover:scale-105'
           src={coverImage ?? 'https://syria.adra.cloud/wp-content/uploads/2021/10/empty.jpg'}
@@ -25,7 +25,7 @@ export default function PostCard ({ post }: PostCardProps) {
       </Link>
       <div className='flex flex-col gap-4 px-6 py-4'>
         <div>
-          <Link href={`/${author.id}/${id}`}>
+          <Link href={`/authors/${author.id}/${id}`}>
             <h3 className='text-xl  font-bold uppercase text-black'>{title}</h3>
           </Link>
 
@@ -42,7 +42,7 @@ export default function PostCard ({ post }: PostCardProps) {
             {content}
           </p>
 
-          <LinkButton href={`/${author.id}/${id}`}>Leer más</LinkButton>
+          <LinkButton href={`/authors/${author.id}/${id}`}>Leer más</LinkButton>
         </div>
 
         <div className='space-y-2 text-sm text-gray-600'>
