@@ -15,19 +15,19 @@ datasource db {
 }
 
 model User {
-  id           String    @id @default(dbgenerated("gen_random_uuid()")) @map("id")
-  username     String    @unique @map("username")
+  id           String    @id @map("id") @db.Uuid
+  username     String    @unique @map("user_name")
   email        String    @unique @map("email")
   profileImage String?   @map("profile_image")
   createdAt    DateTime  @default(now()) @map("created_at")
-  posts        Post[]
+  posts        Post[]    
   comments     Comment[]
 
   @@map("users")
 }
 
 model Category {
-  id    String @id @default(dbgenerated("gen_random_uuid()")) @map("id") @unique
+  id    String @id @unique @map("id")
   name  String @unique @map("name")
   posts Post[]
 
@@ -35,11 +35,11 @@ model Category {
 }
 
 model Post {
-  id         String     @id @default(cuid()) @map("id")
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @map("id")
   title      String     @map("title")
   content    String     @map("content")
   createdAt  DateTime   @default(now()) @map("created_at")
-  authorId   String     @map("author_id")
+  authorId   String     @map("author_id") @db.Uuid
   author     User       @relation(fields: [authorId], references: [id])
   comments   Comment[]
   images     Image[]
@@ -49,19 +49,19 @@ model Post {
 }
 
 model Comment {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @map("id")
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
   content   String   @map("content")
   createdAt DateTime @default(now()) @map("created_at")
   postId    String   @map("post_id")
   post      Post     @relation(fields: [postId], references: [id])
-  userId    String   @map("user_id")
+  userId    String   @map("user_id") @db.Uuid
   user      User     @relation(fields: [userId], references: [id])
 
   @@map("comments")
 }
 
 model Image {
-  id     String @id @default(dbgenerated("gen_random_uuid()")) @map("id")
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
   url    String @map("url")
   postId String @map("post_id")
   post   Post   @relation(fields: [postId], references: [id])
