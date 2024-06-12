@@ -1,45 +1,25 @@
 import { LinkButton } from '@/components/common/button'
+import { SinglePost } from '@/types/posts'
 import { formatPostDate } from '@/utils/format'
+import { Category } from '@prisma/client'
 import { Clock3, Tags } from 'lucide-react'
 import Link from 'next/link'
 
-interface Category {
-  id: string
-  name: string
-}
-
-interface Author {
-  id: string
-  username: string
-  email: string
-  profileImage: string
-}
-
-interface Post {
-  id: string
-  title: string
-  description: string
-  image: string
-  date: Date
-  categories: Category[]
-  author: Author
-}
-
 interface PostCardProps {
-  post: Post
+  post: SinglePost
 }
 
 const MAX_CATEGORIES_TO_DISPLAY = 2
 
 export default function PostCard ({ post }: PostCardProps) {
-  const { id, title, description, image, date, categories, author } = post
+  const { id, title, content, createdAt, author, categories, coverImage } = post
 
   return (
     <div className='group overflow-hidden rounded-lg shadow-lg'>
       <Link href={`/${author.id}/${id}`}>
         <img
           className='h-48 w-full rounded-t-lg object-cover transition-transform duration-100 group-hover:scale-105'
-          src={image}
+          src={coverImage ?? 'https://syria.adra.cloud/wp-content/uploads/2021/10/empty.jpg'}
           alt={title}
         />
       </Link>
@@ -51,13 +31,15 @@ export default function PostCard ({ post }: PostCardProps) {
 
           <div className='mt-1 inline-flex items-center gap-1 text-gray-600'>
             <span>Por</span>
-            <Link className='font-bold' href={`/authors/${author.id}`}>{author.username}</Link>
+            <Link className='font-bold' href={`/authors/${author.id}`}>
+              {author.username}
+            </Link>
           </div>
         </div>
 
         <div>
           <p className='mb-3 line-clamp-3 min-h-16 text-pretty text-sm text-primary'>
-            {description}
+            {content}
           </p>
 
           <LinkButton href={`/${author.id}/${id}`}>Leer más</LinkButton>
@@ -75,7 +57,7 @@ export default function PostCard ({ post }: PostCardProps) {
 
           <div className='flex items-center gap-2'>
             <Clock3 className='size-4 text-highlight' />
-            <span>{formatPostDate(date)}</span>
+            <span>{formatPostDate(createdAt)}</span>
           </div>
         </div>
       </div>
