@@ -1,4 +1,5 @@
 import { SearchParams } from '@/types/props'
+import { getWhereOptionsPosts } from '@/utils/filters/posts'
 import { formatPagination } from '@/utils/format'
 import prisma from '@/utils/prisma'
 
@@ -8,8 +9,10 @@ export async function getPosts (searchParams: SearchParams) {
     limit: searchParams.limit ?? 12
   }
   const pagination = formatPagination(rawPagination)
+  const where = getWhereOptionsPosts(searchParams)
   const postPromise = prisma.post.findMany({
     skip: pagination.skip,
+    where,
     include: {
       author: true,
       categories: true,
@@ -21,7 +24,9 @@ export async function getPosts (searchParams: SearchParams) {
     }
   })
 
-  const countPromise = prisma.post.count()
+  const countPromise = prisma.post.count({
+    where
+  })
 
   const [posts, count] = await prisma.$transaction([postPromise, countPromise])
 

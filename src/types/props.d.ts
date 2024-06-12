@@ -4,6 +4,7 @@ interface SearchParams {
   page?: string
   limit?: string
   q?: string
+  categoryId?: string
 }
 
 interface Params {
