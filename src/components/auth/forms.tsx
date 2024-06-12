@@ -30,7 +30,7 @@ export function LoginForm () {
 
       <p className='mt-2 inline-flex justify-center gap-2 text-sm text-primary'>
         Nuevo usuario?
-        <Link href='/signup' className='text-highlight underline'>Regístrate</Link>
+        <Link href='/register' className='text-highlight underline'>Regístrate</Link>
       </p>
     </form>
   )
