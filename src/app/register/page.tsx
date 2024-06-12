@@ -1,7 +1,17 @@
 import { RegisterForm } from '@/components/auth/forms'
+import { ServerPageProps } from '@/types/props'
+import { getSession } from '@/utils/auth'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
-export default function RegisterPage () {
+export default async function RegisterPage ({ searchParams }: ServerPageProps) {
+  const { error } = searchParams
+  const session = await getSession()
+
+  if (session !== null) {
+    redirect('/')
+  }
+
   return (
     <div className='relative min-h-dvh bg-gradient-to-tl from-[#1b2834] via-[#4a90e2] to-[#619bc4] p-7'>
       <div className='mx-auto mt-10 flex max-w-sm overflow-auto rounded-lg bg-white shadow-lg lg:max-w-4xl'>
@@ -32,8 +42,7 @@ export default function RegisterPage () {
             </div>
           </div>
 
-          <RegisterForm />
-
+          <RegisterForm error={error} />
         </div>
 
         <div
