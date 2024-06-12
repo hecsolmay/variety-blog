@@ -1,7 +1,6 @@
 import HomeHero from '@/components/common/hero'
 import HomeCategoriesSection from '@/components/sections/home/categories'
 import HomePostSection from '@/components/sections/home/post'
-import { ServerPageProps } from '@/types/props'
 
 export default function Home () {
 
