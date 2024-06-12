@@ -1,79 +1,182 @@
 'use client'
 
+import { login, register as registerAction } from '@/actions/auth'
+import Button from '@/components/common/button'
 import { FormItem } from '@/components/common/form'
 import Input from '@/components/common/input'
-import Button from '@/components/common/button'
+import { LoginInput, loginSchema } from '@/schemas/auth/login'
+import { RegisterInput, registerSchema } from '@/schemas/auth/register'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
+import { useForm } from 'react-hook-form'
 
-export function LoginForm () {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
+interface LoginFormProps {
+  error?: string
+}
 
-    const email = formData.get('email')
-    const password = formData.get('password')
+export function LoginForm ({ error }: LoginFormProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useForm<LoginInput>({
+    defaultValues: {
+      email: '',
+      password: ''
+    },
+    resolver: zodResolver(loginSchema)
+  })
 
-    alert(JSON.stringify({ email, password }))
+  const onSubmit = async (data: LoginInput) => {
+    try {
+      await login(data)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
+  const hasError = !!error
+
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col gap-4 px-6 pb-7'>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className='flex flex-col gap-4 px-6 pb-7'
+    >
       <FormItem label='Correo electrónico'>
-        <Input type='text' placeholder='example@mail.com' />
+        <Input
+          disabled={isSubmitting}
+          register={register('email')}
+          error={errors.email?.message}
+          hasError={hasError}
+          type='text'
+          placeholder='example@mail.com'
+        />
       </FormItem>
       <FormItem label='Contraseña'>
-        <Input type='password' placeholder='Escribe tu contraseña' />
+        <Input
+          disabled={isSubmitting}
+          register={register('password')}
+          error={errors.password?.message}
+          hasError={hasError}
+          type='password'
+          placeholder='Escribe tu contraseña'
+        />
       </FormItem>
-      <Button className='mt-3 w-full' type='submit'>
-        Iniciar sesión
-      </Button>
+      <div>
+        <Button loading={isSubmitting} className='mt-3 w-full' type='submit'>
+          Iniciar sesión
+        </Button>
 
-      <p className='mt-2 inline-flex justify-center gap-2 text-sm text-primary'>
+        {error && (
+          <p className='mt-2 animate-shake text-center text-sm text-red-500'>
+            {error}
+          </p>
+        )}
+      </div>
+
+      <p className='mt-2 inline-flex flex-wrap justify-center gap-2 text-sm text-primary'>
         Nuevo usuario?
-        <Link href='/register' className='text-highlight underline'>Regístrate</Link>
+        <Link href='/register' className='text-highlight underline'>
+          Regístrate
+        </Link>
       </p>
     </form>
   )
 }
 
-export function RegisterForm () {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
+interface RegisterFormProps {
+  error?: string
+}
 
-    const email = formData.get('email')
-    const name = formData.get('name')
-    const password = formData.get('password')
-    const passwordConfirm = formData.get('passwordConfirm')
+export function RegisterForm ({ error }: RegisterFormProps) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useForm<RegisterInput>({
+    defaultValues: {
+      email: '',
+      username: '',
+      password: '',
+      confirmPassword: ''
+    },
+    resolver: zodResolver(registerSchema)
+  })
 
-    alert(JSON.stringify({ email, password, name, passwordConfirm }))
+  const onSubmit = async (data: RegisterInput) => {
+    try {
+      const { confirmPassword, password } = data
+      if (password !== confirmPassword) {
+        throw new Error('Las contraseñas no coinciden')
+      }
+      await registerAction(data)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col gap-4 px-6 pb-7'>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className='flex flex-col gap-4 px-6 pb-7'
+    >
       <FormItem label='Nombre de usuario'>
-        <Input type='text' placeholder='johndoe' />
+        <Input
+          disabled={isSubmitting}
+          register={register('username')}
+          error={errors.username?.message}
+          type='text'
+          placeholder='johndoe'
+        />
       </FormItem>
 
       <FormItem label='Correo electrónico'>
-        <Input type='text' placeholder='example@mail.com' />
+        <Input
+          disabled={isSubmitting}
+          register={register('email')}
+          error={errors.email?.message}
+          type='text'
+          placeholder='example@mail.com'
+        />
       </FormItem>
 
       <FormItem label='Contraseña'>
-        <Input type='password' placeholder='Escribe tu contraseña' />
+        <Input
+          disabled={isSubmitting}
+          register={register('password')}
+          error={errors.password?.message}
+          type='password'
+          placeholder='Escribe tu contraseña'
+        />
       </FormItem>
 
       <FormItem label='Confirmar contraseña'>
-        <Input type='password' placeholder='Repite tu contraseña' />
+        <Input
+          disabled={isSubmitting}
+          register={register('confirmPassword')}
+          error={errors.confirmPassword?.message}
+          type='password'
+          placeholder='Repite tu contraseña'
+        />
       </FormItem>
 
-      <Button className='mt-3 w-full' type='submit'>
-        Registrarse
-      </Button>
+      <div>
+        <Button loading={isSubmitting} className='mt-3 w-full' type='submit'>
+          Registrarse
+        </Button>
+
+        {error && (
+          <p className='mt-2 animate-shake text-center text-sm text-red-500'>
+            {error}
+          </p>
+        )}
+      </div>
 
       <p className='mt-2 inline-flex justify-center gap-2 text-sm text-primary'>
         Ya tienes una cuenta?
-        <Link href='/login' className='text-highlight underline'>Iniciar sesión</Link>
+        <Link href='/login' className='text-highlight underline'>
+          Iniciar sesión
+        </Link>
       </p>
     </form>
   )
