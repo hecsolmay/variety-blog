@@ -1,7 +1,10 @@
+'use client'
+
 import { VariantProps, cva } from 'class-variance-authority'
 import { cn } from '@/utils/cn'
 import { forwardRef } from 'react'
 import Link from 'next/link'
+import { useFormStatus } from 'react-dom'
 
 const buttonVariants = cva(
   `focus-visible:ring-ring inline-flex h-9 
@@ -37,11 +40,18 @@ interface ButtonProps
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, loading = false, variant = 'default', ...props }, ref) => {
+    const { pending } = useFormStatus()
+
+    const isLoading = loading || pending
+
     return (
       <button
         {...props}
         ref={ref}
-        className={cn(buttonVariants({ variant, loading }), className)}
+        className={cn(
+          buttonVariants({ variant, loading: isLoading }),
+          className
+        )}
       />
     )
   }

@@ -6,4 +6,4 @@ export interface CommonInputProps extends InputProps {
   register?: any
   error?: string
 }
-
+export interface LabelProps extends React.HTMLAttributes<HTMLLabelElement> {}
