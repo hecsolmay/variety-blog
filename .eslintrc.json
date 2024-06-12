@@ -19,6 +19,7 @@
     "eol-last": ["error", "always"],
     "object-curly-spacing": ["error", "always"],
     "array-bracket-spacing": ["error", "never"],
-    "react/display-name": "off"
+    "react/display-name": "off",
+    "@next/next/no-img-element": "off"
   }
 }

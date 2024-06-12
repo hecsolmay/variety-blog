@@ -35,3 +35,41 @@ export function LoginForm () {
     </form>
   )
 }
+
+export function RegisterForm () {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+
+    const email = formData.get('email')
+    const name = formData.get('name')
+    const password = formData.get('password')
+    const passwordConfirm = formData.get('passwordConfirm')
+
+    alert(JSON.stringify({ email, password, name, passwordConfirm }))
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className='flex flex-col gap-4 px-6 pb-7'>
+      <FormItem label='Nombre de usuario'>
+        <Input type='text' placeholder='johndoe' />
+      </FormItem>
+
+      <FormItem label='Correo electrónico'>
+        <Input type='text' placeholder='example@mail.com' />
+      </FormItem>
+
+      <FormItem label='Contraseña'>
+        <Input type='password' placeholder='Escribe tu contraseña' />
+      </FormItem>
+
+      <FormItem label='Confirmar contraseña'>
+        <Input type='password' placeholder='Repite tu contraseña' />
+      </FormItem>
+
+      <Button className='mt-3 w-full' type='submit'>
+        Registrarse
+      </Button>
+    </form>
+  )
+}
