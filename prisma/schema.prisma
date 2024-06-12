@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @map("id")
+  username     String    @unique @map("username")
+  email        String    @unique @map("email")
+  profileImage String?   @map("profile_image")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  posts        Post[]
+  comments     Comment[]
+
+  @@map("users")
+}
+
+model Category {
+  id    String @id @default(dbgenerated("gen_random_uuid()")) @map("id") @unique
+  name  String @unique @map("name")
+  posts Post[]
+
+  @@map("categories")
+}
+
+model Post {
+  id         String     @id @default(cuid()) @map("id")
+  title      String     @map("title")
+  content    String     @map("content")
+  createdAt  DateTime   @default(now()) @map("created_at")
+  authorId   String     @map("author_id")
+  author     User       @relation(fields: [authorId], references: [id])
+  comments   Comment[]
+  images     Image[]
+  categories Category[]
+
+  @@map("posts")
+}
+
+model Comment {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @map("id")
+  content   String   @map("content")
+  createdAt DateTime @default(now()) @map("created_at")
+  postId    String   @map("post_id")
+  post      Post     @relation(fields: [postId], references: [id])
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("comments")
+}
+
+model Image {
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @map("id")
+  url    String @map("url")
+  postId String @map("post_id")
+  post   Post   @relation(fields: [postId], references: [id])
+
+  @@map("images")
+}
