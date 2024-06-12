@@ -70,6 +70,11 @@ export function RegisterForm () {
       <Button className='mt-3 w-full' type='submit'>
         Registrarse
       </Button>
+
+      <p className='mt-2 inline-flex justify-center gap-2 text-sm text-primary'>
+        Ya tienes una cuenta?
+        <Link href='/login' className='text-highlight underline'>Iniciar sesión</Link>
+      </p>
     </form>
   )
 }
