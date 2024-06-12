@@ -4,7 +4,6 @@ import { getPosts } from '@/controllers/posts'
 import { SearchParams } from '@/types/props'
 import PostCard from './card'
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 interface ListOfPostsProps {
   searchParams: SearchParams
   isHome?: boolean
@@ -14,7 +13,6 @@ export async function ListOfPosts ({
   searchParams,
   isHome = false
 }: ListOfPostsProps) {
-  await delay(4000)
   const response = await getPosts(searchParams)
 
   if (response?.error !== undefined) {
@@ -42,7 +40,15 @@ export async function ListOfPosts ({
       )}
 
       {!isHome && (
-        <Pagination info={{ currentPage: 3, total: 100, pages: 10, hasNext: true, hasPrev: true }} />
+        <Pagination
+          info={{
+            currentPage: 3,
+            total: 100,
+            pages: 10,
+            hasNext: true,
+            hasPrev: true
+          }}
+        />
       )}
     </>
   )
