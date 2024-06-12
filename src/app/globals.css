@@ -17,3 +17,15 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.nav-scroll-shadow {
+  animation: nav-shadown 1s linear both;
+  animation-timeline: scroll();
+  animation-range: 0 100px;
+}
+
+@keyframes nav-shadown {
+  to {
+    @apply shadow-lg ring-1 backdrop-blur dark:bg-gray-800/90 bg-white/50 ring-white/10;
+  }
+}
