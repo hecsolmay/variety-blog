@@ -1,6 +1,7 @@
 import { GoToLogin, SingOutButton } from '@/components/auth/actions'
 import DropDown, { DropDownItem } from '@/components/common/dropdown'
 import { userLinks } from '@/constants/links'
+import { getSession } from '@/utils/auth'
 import Link from 'next/link'
 
 type User = {
@@ -9,8 +10,7 @@ type User = {
 }
 
 export async function NavigationAuthItem () {
-  // TODO: Implementar la autenticación
-  const session: User | null = null
+  const session: User | null = await getSession()
 
   if (session) {
     return (
