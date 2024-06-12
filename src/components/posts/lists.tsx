@@ -39,17 +39,7 @@ export async function ListOfPosts ({
         </div>
       )}
 
-      {!isHome && (
-        <Pagination
-          info={{
-            currentPage: 3,
-            total: 100,
-            pages: 10,
-            hasNext: true,
-            hasPrev: true
-          }}
-        />
-      )}
+      {!isHome && <Pagination info={pagination} />}
     </>
   )
 }
