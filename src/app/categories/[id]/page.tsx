@@ -6,32 +6,6 @@ import { ServerPageProps } from '@/types/props'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 
-export const getStaticPaths = async () => {
-  const paths = categories.map(category => ({
-    params: {
-      id: category.id
-    }
-  }))
-
-  return {
-    paths,
-    fallback: false
-  }
-}
-
-export const generateMetadata = async ({ params }: ServerPageProps) => {
-  const category = categories.find(category => category.id === params.id)
-
-  if (!category) {
-    redirect('/404')
-  }
-
-  return {
-    title: category.name,
-    description: `Encuentra los post relacionados a la categoría ${category.name}`
-  }
-}
-
 export default async function CategoryPage ({ params, searchParams }: ServerPageProps) {
   const { id } = params
 
@@ -53,4 +27,21 @@ export default async function CategoryPage ({ params, searchParams }: ServerPage
       </Suspense>
     </main>
   )
+}
+
+export const generateStaticParams = async () => {
+  return categories.map(category => ({ id: category.id }))
+}
+
+export async function generateMetadata ({ params }: ServerPageProps) {
+  const category = categories.find(category => category.id === params.id)
+
+  if (!category) {
+    redirect('/404')
+  }
+
+  return {
+    title: category.name,
+    description: `Encuentra los post relacionados a la categoría ${category.name}`
+  }
 }
