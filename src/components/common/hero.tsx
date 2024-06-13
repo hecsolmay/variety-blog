@@ -15,7 +15,8 @@ export default function HomeHero () {
         <p className='mt-2 text-xl text-gray-500 sm:mt-4 sm:max-w-lg sm:text-2xl'>
           Crea tu propio contenido{' '}
         </p>
-        <div className='mt-6 flex max-w-lg items-center justify-center sm:w-full sm:flex-nowrap'>
+        <div className='mt-6 flex max-w-lg flex-wrap-reverse items-center justify-center gap-3 sm:w-full sm:flex-nowrap'>
+          <LinkButton href='/authors' variant='secondary'>Descubre a los autores</LinkButton>
           <LinkButton href='/account/post/create'>Crear Publicación</LinkButton>
         </div>
       </div>
