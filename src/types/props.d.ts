@@ -6,11 +6,13 @@ interface SearchParams {
   q?: string
   categoryId?: string
   userId?: string
+  slug?: string
 }
 
 interface Params {
   id: string
   userId: string
+  slug: string
 }
 
 export interface ServerPageProps {

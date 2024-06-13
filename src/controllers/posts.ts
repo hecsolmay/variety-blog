@@ -1,4 +1,5 @@
 import * as services from '@/service/posts'
+import { GetPostParams } from '@/types/posts'
 import { SearchParams } from '@/types/props'
 import { getPaginationInfo } from '@/utils/pagination'
 
@@ -21,6 +22,20 @@ export async function getPosts (searchParams: SearchParams) {
   } catch (error) {
     return {
       error: 'Error getting posts'
+    }
+  }
+}
+
+export async function getOnePost (params: GetPostParams) {
+  try {
+    const result = await services.getPost(params)
+
+    return {
+      post: result
+    }
+  } catch (error) {
+    return {
+      error: 'Error getting post'
     }
   }
 }
