@@ -1,6 +1,7 @@
 import * as services from '@/service/posts'
 import { GetPostParams } from '@/types/posts'
 import { SearchParams } from '@/types/props'
+import { formatTitleSlug } from '@/utils/format'
 import { getPaginationInfo } from '@/utils/pagination'
 
 export async function getPosts (searchParams: SearchParams) {
@@ -59,6 +60,34 @@ export async function deletePostById (id: string) {
     console.log(error)
     return {
       error: 'Error deleting post'
+    }
+  }
+}
+
+interface CreatePostInput {
+  title: string
+  content: string
+  coverImage: string
+  images: string[],
+  authorId: string
+  categories: string[]
+}
+
+export async function createPost (data: CreatePostInput) {
+  const slug = formatTitleSlug(data.title)
+
+  try {
+    const result = await services.createPost({
+      ...data,
+      slug
+    })
+
+    return {
+      post: result
+    }
+  } catch (error) {
+    return {
+      error: 'Error creating post'
     }
   }
 }

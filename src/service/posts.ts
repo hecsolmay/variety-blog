@@ -69,3 +69,36 @@ export async function deletePost (id: string) {
 
   return deletedPost
 }
+
+interface CreatePostInput {
+  title: string
+  content: string
+  coverImage: string
+  images: string[],
+  slug: string
+  authorId: string
+  categories: string[]
+}
+
+export async function createPost (rawData: CreatePostInput) {
+  const { images, categories, ...data } = rawData
+
+  const createdPost = await prisma.posts.create({
+    data: {
+      ...data,
+      images: {
+        create: images.map(image => ({
+          url: image
+        }))
+      },
+      categories: {
+        connect: categories.map(categoryId => ({
+          id: categoryId
+        }))
+      }
+    }
+  })
+
+  return createdPost
+}
+
