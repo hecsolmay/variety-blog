@@ -1,4 +1,5 @@
 import { MainContainer } from '@/components/common/containers'
+import { H1 } from '@/components/common/headings'
 import { ListOfPostsFallback } from '@/components/fallbacks/post'
 import { ListOfPosts } from '@/components/posts/lists'
 import { categories } from '@/constants/categories'
@@ -7,7 +8,10 @@ import { ServerPageProps } from '@/types/props'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 
-export default async function CategoryPage ({ params, searchParams }: ServerPageProps) {
+export default async function CategoryPage ({
+  params,
+  searchParams
+}: ServerPageProps) {
   const { id } = params
 
   const categoryFound = categories.find(category => category.id === id)
@@ -21,7 +25,7 @@ export default async function CategoryPage ({ params, searchParams }: ServerPage
 
   return (
     <MainContainer>
-      <h1 className='text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>{categoryFound.name}</h1>
+      <H1>{categoryFound.name}</H1>
 
       <Suspense fallback={<ListOfPostsFallback />}>
         <ListOfPosts searchParams={{ ...searchParams, categoryId: id }} />
