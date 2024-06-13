@@ -1,4 +1,4 @@
-import Badge, { getBadgeColor } from '@/components/common/badges'
+import Badge from '@/components/common/badges'
 import { MainContainer } from '@/components/common/containers'
 import { H1 } from '@/components/common/headings'
 import { getOnePost } from '@/controllers/posts'
