@@ -18,7 +18,7 @@ export default function PostCard ({ post }: PostCardProps) {
     <div className='group overflow-hidden rounded-lg shadow-lg'>
       <Link href={`/authors/${author.id}/${slug}`}>
         <img
-          className='h-48 w-full rounded-t-lg object-cover transition-transform duration-100 group-hover:scale-105'
+          className='h-32 w-full rounded-t-lg object-cover transition-transform duration-100 group-hover:scale-105'
           src={coverImage ?? 'https://syria.adra.cloud/wp-content/uploads/2021/10/empty.jpg'}
           alt={title}
         />
@@ -38,7 +38,7 @@ export default function PostCard ({ post }: PostCardProps) {
         </div>
 
         <div>
-          <p className='mb-3 line-clamp-3 min-h-16 text-pretty text-sm text-primary'>
+          <p className='mb-3 line-clamp-2 h-10 text-pretty text-sm text-primary'>
             {content}
           </p>
 
@@ -66,6 +66,10 @@ export default function PostCard ({ post }: PostCardProps) {
 }
 
 function CategoriesLinks ({ categories }: { categories: Categories[] }) {
+  if (categories.length === 0) {
+    return <span>Sin categorías</span>
+  }
+
   const categoriesToDisplay = categories.slice(0, MAX_CATEGORIES_TO_DISPLAY)
 
   return (

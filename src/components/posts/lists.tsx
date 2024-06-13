@@ -1,5 +1,6 @@
 import { LinkButton } from '@/components/common/button'
 import Pagination from '@/components/common/pagination'
+import { ListOfPostsEmpty } from '@/components/empty/posts'
 import { getPosts } from '@/controllers/posts'
 import { SearchParams } from '@/types/props'
 import PostCard from './card'
@@ -23,6 +24,10 @@ export async function ListOfPosts ({
   const { pagination, posts } = response
 
   const { hasNext } = pagination
+
+  if (posts.length === 0) {
+    return <ListOfPostsEmpty />
+  }
 
   return (
     <>
