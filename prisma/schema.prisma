@@ -312,7 +312,7 @@ model Users {
   username     String     @unique
   email        String     @unique
   profileImage String?    @map("profile_image")
-  postsCount   BigInt?    @default(0) @map("posts_count")
+  postsCount   Int       @default(0) @map("posts_count")
   users        auth_users @relation(fields: [id], references: [id], onDelete: Cascade)
   posts        Posts[]
   Comment      Comments[]
