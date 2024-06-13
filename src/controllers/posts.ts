@@ -91,3 +91,22 @@ export async function createPost (data: CreatePostInput) {
     }
   }
 }
+
+export async function updatePost (id: string, data: CreatePostInput) {
+  const slug = formatTitleSlug(data.title)
+
+  try {
+    const result = await services.updatePost(id, {
+      ...data,
+      slug
+    })
+
+    return {
+      post: result
+    }
+  } catch (error) {
+    return {
+      error: 'Error updating post'
+    }
+  }
+}

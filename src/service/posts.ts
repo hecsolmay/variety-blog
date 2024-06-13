@@ -102,3 +102,47 @@ export async function createPost (rawData: CreatePostInput) {
   return createdPost
 }
 
+export async function updatePost (id: string, rawData: CreatePostInput) {
+  const { images, categories, ...data } = rawData
+
+  const deletedCategories =  prisma.categories.deleteMany({
+    where: {
+      posts: {
+        some: {
+          id
+        }
+      }
+    }
+  })
+
+  const deletedImages =  prisma.images.deleteMany({
+    where: {
+      post: {
+        id
+      }
+    }
+  })
+
+  await prisma.$transaction([deletedCategories, deletedImages])
+
+  const updatedPost = await prisma.posts.update({
+    where: {
+      id
+    },
+    data: {
+      ...data,
+      images: {
+        create: images.map(image => ({
+          url: image
+        }))
+      },
+      categories: {
+        connect: categories.map(categoryId => ({
+          id: categoryId
+        }))
+      }
+    }
+  })
+
+  return updatedPost
+}
