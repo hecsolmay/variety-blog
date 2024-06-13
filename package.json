@@ -13,6 +13,8 @@
     "generate": "prisma generate"
   },
   "dependencies": {
+    "@edgestore/react": "^0.1.6",
+    "@edgestore/server": "^0.1.6",
     "@hookform/resolvers": "3.6.0",
     "@midudev/tailwind-animations": "^0.0.7",
     "@prisma/client": "^5.15.0",
