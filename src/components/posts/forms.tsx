@@ -230,7 +230,7 @@ export function UpdatePostForm ({ post }: UpdatePostFormProps) {
       const formattedCategories = selectedCategories.map(c => c.value)
       console.log({ images, ...data, coverImage })
 
-      updatePost(post.id,{
+      await updatePost(post.id,{
         ...data,
         coverImage,
         images,

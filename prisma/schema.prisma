@@ -312,36 +312,36 @@ model Users {
   username     String     @unique
   email        String     @unique
   profileImage String?    @map("profile_image")
-  postsCount   Int       @default(0) @map("posts_count")
-  users        auth_users @relation(fields: [id], references: [id], onDelete: Cascade)
-  posts        Posts[]
+  postsCount   Int        @default(0) @map("posts_count")
   Comment      Comments[]
+  posts        Posts[]
+  users        auth_users @relation(fields: [id], references: [id], onDelete: Cascade)
 
   @@map("users")
   @@schema("public")
 }
 
 model Categories {
-  id    String  @id @unique @map("id")
-  name  String  @unique @map("name")
-  posts Posts[] @relation("CategoryToPost")
+  id              String            @id @unique @map("id")
+  name            String            @unique @map("name")
+  categoriesPosts CategoriesPosts[]
 
   @@map("categories")
   @@schema("public")
 }
 
 model Posts {
-  id         String       @id @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
-  title      String       @map("title")
-  slug       String       @map("slug")
-  content    String       @map("content")
-  createdAt  DateTime     @default(now()) @map("created_at")
-  authorId   String       @map("author_id") @db.Uuid
-  coverImage String?      @map("cover_image")
-  comments   Comments[]
-  images     Images[]
-  author     Users        @relation(fields: [authorId], references: [id])
-  categories Categories[] @relation("CategoryToPost")
+  id              String            @id @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  title           String            @map("title")
+  slug            String            @map("slug")
+  content         String            @map("content")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  authorId        String            @map("author_id") @db.Uuid
+  coverImage      String?           @map("cover_image")
+  categoriesPosts CategoriesPosts[]
+  comments        Comments[]
+  images          Images[]
+  author          Users             @relation(fields: [authorId], references: [id])
 
   @@map("posts")
   @@schema("public")
@@ -367,6 +367,18 @@ model Images {
   post   Posts  @relation(fields: [postId], references: [id])
 
   @@map("images")
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model CategoriesPosts {
+  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  categoryId String     @map("category_id")
+  postId     String     @map("post_id") @db.Uuid
+  categories Categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  posts      Posts      @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("categories_posts")
   @@schema("public")
 }
 

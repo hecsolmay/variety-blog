@@ -5,9 +5,9 @@ export function getWhereOptionsPosts (searchParams: SearchParams) {
   const whereOptions: Prisma.PostsWhereInput = {}
 
   if (searchParams.categoryId) {
-    whereOptions.categories = {
+    whereOptions.categoriesPosts = {
       some: {
-        id: searchParams.categoryId
+        categoryId: searchParams.categoryId
       }
     }
   }

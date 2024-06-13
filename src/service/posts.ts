@@ -17,7 +17,11 @@ export async function getPosts (searchParams: SearchParams) {
     where,
     include: {
       author: true,
-      categories: true,
+      categoriesPosts: {
+        include: {
+          categories: true
+        }
+      },
       images: true
     },
     take: pagination.limit,
@@ -32,8 +36,12 @@ export async function getPosts (searchParams: SearchParams) {
 
   const [posts, count] = await prisma.$transaction([postPromise, countPromise])
 
+  const mappedPosts = posts.map(post => ({
+    ...post,
+    categories: post.categoriesPosts.map(c => c.categories)
+  }))
   return {
-    posts,
+    posts: mappedPosts,
     totalItems: count,
     pagination
   }
@@ -52,16 +60,27 @@ export async function getPost (params: GetPostParams) {
     where,
     include: {
       author: true,
-      categories: true,
+      categoriesPosts: {
+        include: {
+          categories: true
+        }
+      },
       images: true
     }
   })
 
-  return post
+  if (post === null) return null
+
+  const mappedPosts = {
+    ...post,
+    categories: post.categoriesPosts.map(c => c.categories)
+  }
+
+  return mappedPosts
 }
 
 export async function deletePost (id: string) {
-  const deletedPost =await prisma.posts.delete({
+  const deletedPost = await prisma.posts.delete({
     where: {
       id
     }
@@ -74,7 +93,7 @@ interface CreatePostInput {
   title: string
   content: string
   coverImage: string
-  images: string[],
+  images: string[]
   slug: string
   authorId: string
   categories: string[]
@@ -90,13 +109,15 @@ export async function createPost (rawData: CreatePostInput) {
         create: images.map(image => ({
           url: image
         }))
-      },
-      categories: {
-        connect: categories.map(categoryId => ({
-          id: categoryId
-        }))
       }
     }
+  })
+
+  await prisma.categoriesPosts.createMany({
+    data: categories.map(category => ({
+      categoryId: category,
+      postId: createdPost.id
+    }))
   })
 
   return createdPost
@@ -105,25 +126,24 @@ export async function createPost (rawData: CreatePostInput) {
 export async function updatePost (id: string, rawData: CreatePostInput) {
   const { images, categories, ...data } = rawData
 
-  const deletedCategories =  prisma.categories.deleteMany({
+  const deletedCategories = prisma.categoriesPosts.deleteMany({
     where: {
-      posts: {
-        some: {
-          id
-        }
-      }
+      postId: id
     }
   })
 
-  const deletedImages =  prisma.images.deleteMany({
+  const deletedImages = prisma.images.deleteMany({
     where: {
-      post: {
-        id
-      }
+      postId: id
     }
   })
 
-  await prisma.$transaction([deletedCategories, deletedImages])
+  try {
+    await prisma.$transaction([deletedCategories, deletedImages])
+  } catch (error) {
+    console.error(error)
+    throw new Error('Error updating post')
+  }
 
   const updatedPost = await prisma.posts.update({
     where: {
@@ -135,13 +155,15 @@ export async function updatePost (id: string, rawData: CreatePostInput) {
         create: images.map(image => ({
           url: image
         }))
-      },
-      categories: {
-        connect: categories.map(categoryId => ({
-          id: categoryId
-        }))
       }
     }
+  })
+
+  await prisma.categoriesPosts.createMany({
+    data: categories.map(category => ({
+      categoryId: category,
+      postId: updatedPost.id
+    }))
   })
 
   return updatedPost

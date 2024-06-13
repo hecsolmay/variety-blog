@@ -49,7 +49,7 @@ export async function updatePost (id: string, data: CreatePostInput) {
 
   const result = await updatePostController(id, { ...data, authorId: session.id })
 
-  if (result.error) {
+  if (result.error !== undefined) {
     console.error(result.error)
     throw new Error(result.error)
   }
