@@ -16,6 +16,8 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { FileState } from '../common/dropzone/multi'
 import { createPost } from '@/actions/posts'
+import { MultiSelect, OptionType } from '../common/select'
+import { categories } from '@/constants/categories'
 
 export function CreatePostForm () {
   const {
@@ -37,6 +39,7 @@ export function CreatePostForm () {
   const { uploadFile, isUploading, file, progress, setFile } = useFileUpload()
   const [isMultiUploading, setIsMultiUploading] = useState(false)
   const [fileStates, setFileStates] = useState<FileState[]>([])
+  const [selectedCategories, setSelectedCategories] = useState<OptionType[]>([])
 
   const onSubmit = async (data: CreatePostInput) => {
     if (isMultiUploading || isUploading) return
@@ -47,7 +50,8 @@ export function CreatePostForm () {
     }
 
     try {
-      await createPost({ ...data, coverImage, images, categories: [] })
+      const formattedCategories = selectedCategories.map(c => c.value)
+      await createPost({ ...data, coverImage, images, categories: formattedCategories })
       toast.success('Post creado con éxito')
       resetForm()
     } catch (error) {
@@ -86,6 +90,7 @@ export function CreatePostForm () {
     setIsMultiUploading(false)
     setFile(undefined)
     reset()
+    setSelectedCategories([])
   }
 
   return (
@@ -124,6 +129,14 @@ export function CreatePostForm () {
           className='min-h-56'
           register={register('content')}
           error={errors.content?.message}
+        />
+      </FormItem>
+
+      <FormItem label='Categorías' labelClassName='text-xl'>
+        <MultiSelect
+          options={categories.map(c => ({ label: c.name, value: c.id }))}
+          setSelected={setSelectedCategories}
+          selectedOptions={selectedCategories}
         />
       </FormItem>
 
