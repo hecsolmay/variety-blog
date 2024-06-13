@@ -12,5 +12,11 @@ export function getWhereOptionsPosts (searchParams: SearchParams) {
     }
   }
 
+  if (searchParams.userId) {
+    whereOptions.author = {
+      id: searchParams.userId
+    }
+  }
+
   return whereOptions
 }

@@ -5,10 +5,12 @@ interface SearchParams {
   limit?: string
   q?: string
   categoryId?: string
+  userId?: string
 }
 
 interface Params {
   id: string
+  userId: string
 }
 
 export interface ServerPageProps {

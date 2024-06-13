@@ -43,3 +43,13 @@ export async function getAuthors (searchParams: SearchParams) {
     pagination
   }
 }
+
+export async function getAuthor (id: string) {
+  const author = await prisma.users.findFirst({
+    where: {
+      id
+    }
+  })
+
+  return author
+}
