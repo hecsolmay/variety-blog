@@ -338,6 +338,7 @@ model Posts {
   createdAt       DateTime          @default(now()) @map("created_at")
   authorId        String            @map("author_id") @db.Uuid
   coverImage      String?           @map("cover_image")
+  commentsCount   Int               @default(0) @map("comments_count")
   categoriesPosts CategoriesPosts[]
   comments        Comments[]
   images          Images[]
