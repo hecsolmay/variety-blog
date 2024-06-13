@@ -3,3 +3,5 @@ export const DEFAULT_PAGINATION = {
   limit: 12,
   skip: 0
 }
+
+export const IMAGE_MAX_SIZE = 1024 * 1024 * 3 // 3MB

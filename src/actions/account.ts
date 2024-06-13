@@ -9,3 +9,9 @@ export async function updateAccount (userId: string, data: ChangeProfileInput) {
   revalidateTag('profile')
   return updatedUser
 }
+
+export async function updateImageProfile (userId: string, profileImage: string) {
+  const updatedUser = await updateUser({  id: userId, profileImage })
+  revalidateTag('profile')
+  return updatedUser
+}
