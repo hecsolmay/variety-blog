@@ -1,6 +1,7 @@
+import { MainContainer } from '@/components/common/containers'
 import { ListOfPostsFallback } from '@/components/fallbacks/post'
 import { ListOfPosts } from '@/components/posts/lists'
-import {  categories  } from '@/constants/categories'
+import { categories } from '@/constants/categories'
 import { getPosts } from '@/controllers/posts'
 import { ServerPageProps } from '@/types/props'
 import { redirect } from 'next/navigation'
@@ -19,13 +20,13 @@ export default async function CategoryPage ({ params, searchParams }: ServerPage
   console.log(response)
 
   return (
-    <main className='mx-auto min-h-[80dvh] max-w-7xl px-4 py-6 md:px-8'>
+    <MainContainer>
       <h1 className='text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>{categoryFound.name}</h1>
 
       <Suspense fallback={<ListOfPostsFallback />}>
         <ListOfPosts searchParams={{ ...searchParams, categoryId: id }} />
       </Suspense>
-    </main>
+    </MainContainer>
   )
 }
 
