@@ -7,7 +7,7 @@ async function main () {
   console.log('Seeding data...')
 
   const promises = categories.map(category =>
-    prisma.category.upsert({
+    prisma.categories.upsert({
       where: {
         id: category.id
       },

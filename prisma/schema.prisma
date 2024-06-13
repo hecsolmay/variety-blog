@@ -10,68 +10,6 @@ datasource db {
   schemas   = ["auth", "public"]
 }
 
-model User {
-  id           String    @id @map("id") @db.Uuid
-  username     String    @unique @map("user_name")
-  email        String    @unique @map("email")
-  profileImage String?   @map("profile_image")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  comments     Comment[]
-  posts        Post[]
-  users        users     @relation(fields: [id], references: [id], onDelete: Cascade)
-
-  @@map("users")
-  @@schema("public")
-}
-
-model Category {
-  id    String @id @unique @map("id")
-  name  String @unique @map("name")
-  posts Post[] @relation("CategoryToPost")
-
-  @@map("categories")
-  @@schema("public")
-}
-
-model Post {
-  id         String     @id @default(dbgenerated("gen_random_uuid()")) @map("id")
-  title      String     @map("title")
-  content    String     @map("content")
-  createdAt  DateTime   @default(now()) @map("created_at")
-  authorId   String     @map("author_id") @db.Uuid
-  coverImage String?    @map("cover_image")
-  comments   Comment[]
-  images     Image[]
-  author     User       @relation(fields: [authorId], references: [id])
-  categories Category[] @relation("CategoryToPost")
-
-  @@map("posts")
-  @@schema("public")
-}
-
-model Comment {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
-  content   String   @map("content")
-  createdAt DateTime @default(now()) @map("created_at")
-  postId    String   @map("post_id")
-  userId    String   @map("user_id") @db.Uuid
-  post      Post     @relation(fields: [postId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
-
-  @@map("comments")
-  @@schema("public")
-}
-
-model Image {
-  id     String @id @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
-  url    String @map("url")
-  postId String @map("post_id")
-  post   Post   @relation(fields: [postId], references: [id])
-
-  @@map("images")
-  @@schema("public")
-}
-
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model audit_log_entries {
   instance_id String?   @db.Uuid
@@ -109,15 +47,15 @@ model flow_state {
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model identities {
   provider_id     String
-  user_id         String    @db.Uuid
+  user_id         String     @db.Uuid
   identity_data   Json
   provider        String
-  last_sign_in_at DateTime? @db.Timestamptz(6)
-  created_at      DateTime? @db.Timestamptz(6)
-  updated_at      DateTime? @db.Timestamptz(6)
-  email           String?   @default(dbgenerated("lower((identity_data ->> 'email'::text))"))
-  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  users           users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  last_sign_in_at DateTime?  @db.Timestamptz(6)
+  created_at      DateTime?  @db.Timestamptz(6)
+  updated_at      DateTime?  @db.Timestamptz(6)
+  email           String?    @default(dbgenerated("lower((identity_data ->> 'email'::text))"))
+  id              String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  users           auth_users @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([provider_id, provider], map: "identities_provider_id_provider_unique")
   @@index([email])
@@ -173,7 +111,7 @@ model mfa_factors {
   updated_at     DateTime         @db.Timestamptz(6)
   secret         String?
   mfa_challenges mfa_challenges[]
-  users          users            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users          auth_users       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([user_id, created_at], map: "factor_id_created_at_idx")
   @@index([user_id])
@@ -189,7 +127,7 @@ model one_time_tokens {
   relates_to String
   created_at DateTime            @default(now()) @db.Timestamp(6)
   updated_at DateTime            @default(now()) @db.Timestamp(6)
-  users      users               @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users      auth_users          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([user_id, token_type])
   @@index([relates_to], map: "one_time_tokens_relates_to_hash_idx", type: Hash)
@@ -258,7 +196,7 @@ model saml_relay_states {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model schema_migrations {
-  version String @id @db.VarChar(255)
+  version String @id @unique(map: "schema_migrations_version_idx") @db.VarChar(14)
 
   @@schema("auth")
 }
@@ -278,7 +216,7 @@ model sessions {
   tag            String?
   mfa_amr_claims mfa_amr_claims[]
   refresh_tokens refresh_tokens[]
-  users          users            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users          auth_users       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([not_after(sort: Desc)])
   @@index([user_id])
@@ -319,7 +257,7 @@ model sso_providers {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
-model users {
+model auth_users {
   instance_id                 String?           @db.Uuid
   id                          String            @id @db.Uuid
   aud                         String?           @db.VarChar(255)
@@ -359,11 +297,77 @@ model users {
   mfa_factors                 mfa_factors[]
   one_time_tokens             one_time_tokens[]
   sessions                    sessions[]
-  users                       User?
+  users                       Users?
 
   @@index([instance_id])
   @@index([is_anonymous])
+  @@map("users")
   @@schema("auth")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model Users {
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  username     String     @unique
+  email        String     @unique
+  profileImage String?    @map("profile_image")
+  postsCount   BigInt?    @default(0) @map("posts_count")
+  users        auth_users @relation(fields: [id], references: [id], onDelete: Cascade)
+  posts        Posts[]
+  Comment      Comments[]
+
+  @@map("users")
+  @@schema("public")
+}
+
+model Categories {
+  id    String  @id @unique @map("id")
+  name  String  @unique @map("name")
+  posts Posts[] @relation("CategoryToPost")
+
+  @@map("categories")
+  @@schema("public")
+}
+
+model Posts {
+  id         String       @id @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  title      String       @map("title")
+  slug       String       @map("slug")
+  content    String       @map("content")
+  createdAt  DateTime     @default(now()) @map("created_at")
+  authorId   String       @map("author_id") @db.Uuid
+  coverImage String?      @map("cover_image")
+  comments   Comments[]
+  images     Images[]
+  author     Users        @relation(fields: [authorId], references: [id])
+  categories Categories[] @relation("CategoryToPost")
+
+  @@map("posts")
+  @@schema("public")
+}
+
+model Comments {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  content   String   @map("content")
+  createdAt DateTime @default(now()) @map("created_at")
+  postId    String   @map("post_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  post      Posts    @relation(fields: [postId], references: [id])
+  user      Users    @relation(fields: [userId], references: [id])
+
+  @@map("comments")
+  @@schema("public")
+}
+
+model Images {
+  id     String @id @default(dbgenerated("gen_random_uuid()")) @map("id") @db.Uuid
+  url    String @map("url")
+  postId String @map("post_id") @db.Uuid
+  post   Posts  @relation(fields: [postId], references: [id])
+
+  @@map("images")
+  @@schema("public")
 }
 
 enum aal_level {

@@ -10,7 +10,7 @@ export async function getPosts (searchParams: SearchParams) {
   }
   const pagination = formatPagination(rawPagination)
   const where = getWhereOptionsPosts(searchParams)
-  const postPromise = prisma.post.findMany({
+  const postPromise = prisma.posts.findMany({
     skip: pagination.skip,
     where,
     include: {
@@ -24,7 +24,7 @@ export async function getPosts (searchParams: SearchParams) {
     }
   })
 
-  const countPromise = prisma.post.count({
+  const countPromise = prisma.posts.count({
     where
   })
 

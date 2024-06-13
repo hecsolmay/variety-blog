@@ -1,7 +1,7 @@
 import { LinkButton } from '@/components/common/button'
 import { SinglePost } from '@/types/posts'
 import { formatPostDate } from '@/utils/format'
-import { Category } from '@prisma/client'
+import { Categories } from '@prisma/client'
 import { Clock3, Tags } from 'lucide-react'
 import Link from 'next/link'
 
@@ -12,11 +12,11 @@ interface PostCardProps {
 const MAX_CATEGORIES_TO_DISPLAY = 2
 
 export default function PostCard ({ post }: PostCardProps) {
-  const { id, title, content, createdAt, author, categories, coverImage } = post
+  const { title, content, createdAt, author, categories, coverImage, slug } = post
 
   return (
     <div className='group overflow-hidden rounded-lg shadow-lg'>
-      <Link href={`/authors/${author.id}/${id}`}>
+      <Link href={`/authors/${author.id}/${slug}`}>
         <img
           className='h-48 w-full rounded-t-lg object-cover transition-transform duration-100 group-hover:scale-105'
           src={coverImage ?? 'https://syria.adra.cloud/wp-content/uploads/2021/10/empty.jpg'}
@@ -25,7 +25,7 @@ export default function PostCard ({ post }: PostCardProps) {
       </Link>
       <div className='flex flex-col gap-4 px-6 py-4'>
         <div>
-          <Link href={`/authors/${author.id}/${id}`}>
+          <Link href={`/authors/${author.id}/${slug}`}>
             <h3 className='text-xl  font-bold uppercase text-black'>{title}</h3>
           </Link>
 
@@ -42,7 +42,7 @@ export default function PostCard ({ post }: PostCardProps) {
             {content}
           </p>
 
-          <LinkButton href={`/authors/${author.id}/${id}`}>Leer más</LinkButton>
+          <LinkButton href={`/authors/${author.id}/${slug}`}>Leer más</LinkButton>
         </div>
 
         <div className='space-y-2 text-sm text-gray-600'>
@@ -65,7 +65,7 @@ export default function PostCard ({ post }: PostCardProps) {
   )
 }
 
-function CategoriesLinks ({ categories }: { categories: Category[] }) {
+function CategoriesLinks ({ categories }: { categories: Categories[] }) {
   const categoriesToDisplay = categories.slice(0, MAX_CATEGORIES_TO_DISPLAY)
 
   return (

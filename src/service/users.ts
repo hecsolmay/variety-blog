@@ -3,7 +3,7 @@ import { formatPagination } from '@/utils/format'
 import prisma from '@/utils/prisma'
 
 export async function getUser (id: string) {
-  const user = await prisma.user.findFirst({
+  const user = await prisma.users.findFirst({
     where: {
       id
     }
@@ -19,7 +19,7 @@ export async function getAuthors (searchParams: SearchParams) {
   }
   const pagination = formatPagination(rawPagination)
 
-  const authorsPromise = prisma.user.findMany({
+  const authorsPromise = prisma.users.findMany({
     where: { posts: { some: {} } },
     skip: pagination.skip,
     take: pagination.limit,
@@ -28,7 +28,7 @@ export async function getAuthors (searchParams: SearchParams) {
     }
   })
 
-  const countPromise = prisma.user.count({
+  const countPromise = prisma.users.count({
     where: { posts: {} }
   })
 
