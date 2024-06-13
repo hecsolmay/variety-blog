@@ -23,7 +23,7 @@ export default async function PostPage ({ params }: ServerPageProps) {
     redirect('/not-found')
   }
 
-  const { title, coverImage, author, categories } = post
+  const { title, coverImage, author, categories, images } = post
 
   console.log(post)
   return (
@@ -68,6 +68,19 @@ export default async function PostPage ({ params }: ServerPageProps) {
       <p className='mt-4 w-full whitespace-pre-line text-balance text-primary opacity-90'>
         {post.content}
       </p>
+
+      {images.length > 0 && (
+        <div className='mt-6 grid grid-cols-1 gap-4 pb-8 md:grid-cols-2'>
+          {images.map((image, index) => (
+            <img
+              key={image.id}
+              src={image.url}
+              className='aspect-video h-auto w-full rounded-lg'
+              alt={`Imagen ${index + 1} del post ${title}`}
+            />
+          ))}
+        </div>
+      )}
 
       {categories.length > 0 && (
         <ul className='mt-6 flex flex-wrap gap-4 pb-8'>
