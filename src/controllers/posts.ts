@@ -39,3 +39,26 @@ export async function getOnePost (params: GetPostParams) {
     }
   }
 }
+
+export async function deletePostById (id: string) {
+  try {
+    const existedPost = await services.getPost({ id })
+
+    if (existedPost === null)  {
+      return {
+        error: 'Post not found'
+      }
+    }
+
+    const result = await services.deletePost(id)
+
+    return {
+      post: result
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      error: 'Error deleting post'
+    }
+  }
+}
