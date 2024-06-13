@@ -1,6 +1,7 @@
 import Badge from '@/components/common/badges'
 import { MainContainer } from '@/components/common/containers'
 import { H1 } from '@/components/common/headings'
+import CommentsSection from '@/components/sections/comments'
 import { getOnePost } from '@/controllers/posts'
 import { ServerPageProps } from '@/types/props'
 import { formatPostDate } from '@/utils/format'
@@ -90,6 +91,8 @@ export default async function PostPage ({ params }: ServerPageProps) {
           ))}
         </ul>
       )}
+
+      <CommentsSection postId={post.id} commentsCount={post.commentsCount} />
     </MainContainer>
   )
 }
