@@ -21,7 +21,6 @@ export default async function CategoryPage ({
   }
 
   const response = await getPosts({ ...searchParams, categoryId: id })
-  console.log(response)
 
   return (
     <MainContainer>

@@ -64,8 +64,6 @@ export function CreatePostForm () {
     } catch (error) {
       toast.error('Ocurrió un error al crear el post')
     }
-
-    console.log({ coverImage, images, ...data })
   }
 
   const handleSingleFileChange = async (file?: File) => {
@@ -228,7 +226,6 @@ export function UpdatePostForm ({ post }: UpdatePostFormProps) {
 
     try {
       const formattedCategories = selectedCategories.map(c => c.value)
-      console.log({ images, ...data, coverImage })
 
       await updatePost(post.id,{
         ...data,

@@ -57,7 +57,7 @@ export async function deletePostById (id: string) {
       post: result
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return {
       error: 'Error deleting post'
     }

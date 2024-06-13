@@ -38,8 +38,6 @@ export function ChangeProfileForm ({
 
   const onSubmit = async (data: ChangeProfileInput) => {
     try {
-      console.log(data)
-
       if (data.email === email && data.username === username) {
         toast.success('Se ha actualizado la información')
         return

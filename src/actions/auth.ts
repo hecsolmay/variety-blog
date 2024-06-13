@@ -22,7 +22,6 @@ export async function login (data: LoginInput, redirectTo?: string) {
 
 export async function register (data: RegisterInput) {
   const supabase = createClient()
-  console.log(data)
   const { error } = await supabase.auth.signUp({
     email: data.email,
     password: data.password,

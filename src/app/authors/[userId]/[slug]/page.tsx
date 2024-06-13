@@ -25,7 +25,6 @@ export default async function PostPage ({ params }: ServerPageProps) {
 
   const { title, coverImage, author, categories, images } = post
 
-  console.log(post)
   return (
     <MainContainer>
       <div className='flex h-full flex-1 flex-col justify-between gap-6'>
