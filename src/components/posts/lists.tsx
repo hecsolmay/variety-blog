@@ -1,9 +1,10 @@
 import { LinkButton } from '@/components/common/button'
 import Pagination from '@/components/common/pagination'
-import { ListOfPostsEmpty } from '@/components/empty/posts'
+import { ListOfPostsAccount, ListOfPostsEmpty } from '@/components/empty/posts'
 import { getPosts } from '@/controllers/posts'
 import { SearchParams } from '@/types/props'
-import PostCard from './card'
+import PostCard, { AccountPostCard } from './card'
+import { PlusIcon } from 'lucide-react'
 
 interface ListOfPostsProps {
   searchParams: SearchParams
@@ -45,6 +46,41 @@ export async function ListOfPosts ({
       )}
 
       {!isHome && <Pagination info={pagination} />}
+    </>
+  )
+}
+
+export async function ListOfUserPosts ({
+  searchParams
+}: Pick<ListOfPostsProps, 'searchParams'>) {
+  const response = await getPosts(searchParams)
+
+  if (response?.error !== undefined) {
+    // TODO: show error
+    return null
+  }
+
+  const { pagination, posts } = response
+
+  if (posts.length === 0) {
+    return <ListOfPostsAccount />
+  }
+
+  return (
+    <>
+      <div className='flex justify-end'>
+        <LinkButton href='/account/posts/create'>
+        Crea un post
+          <PlusIcon className='ml-1 size-4' />
+        </LinkButton>
+      </div>
+      <div className='mt-6 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 2xl:grid-cols-4'>
+        {posts.map(post => (
+          <AccountPostCard key={post.id} post={post} />
+        ))}
+      </div>
+
+      <Pagination info={pagination} />
     </>
   )
 }
