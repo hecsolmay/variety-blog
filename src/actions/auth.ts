@@ -6,9 +6,10 @@ import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-export async function login (data: LoginInput) {
+export async function login (data: LoginInput, redirectTo?: string) {
   const supabase = createClient()
   const { error } = await supabase.auth.signInWithPassword(data)
+  const redirectUrl = redirectTo ?? '/'
 
   if (error !== null) {
     const message = 'Credenciales incorrectas'
@@ -16,7 +17,7 @@ export async function login (data: LoginInput) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/')
+  redirect(redirectUrl)
 }
 
 export async function register (data: RegisterInput) {

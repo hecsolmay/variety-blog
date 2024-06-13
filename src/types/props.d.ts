@@ -7,6 +7,7 @@ interface SearchParams {
   categoryId?: string
   userId?: string
   slug?: string
+  next?: string
 }
 
 interface Params {

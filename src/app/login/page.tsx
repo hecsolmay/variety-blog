@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 export default async function Login ({ searchParams }: ServerPageProps) {
-  const { error } = searchParams
+  const { error, next } = searchParams
   const session = await getSession()
 
   if (session !== null) {
@@ -33,7 +33,7 @@ export default async function Login ({ searchParams }: ServerPageProps) {
             </div>
           </div>
 
-          <LoginForm error={error} />
+          <LoginForm error={error} redirectTo={next} />
 
         </div>
 

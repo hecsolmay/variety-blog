@@ -12,9 +12,10 @@ import { useForm } from 'react-hook-form'
 
 interface LoginFormProps {
   error?: string
+  redirectTo?: string
 }
 
-export function LoginForm ({ error }: LoginFormProps) {
+export function LoginForm ({ error, redirectTo }: LoginFormProps) {
   const {
     register,
     handleSubmit,
@@ -29,7 +30,7 @@ export function LoginForm ({ error }: LoginFormProps) {
 
   const onSubmit = async (data: LoginInput) => {
     try {
-      await login(data)
+      await login(data, redirectTo)
     } catch (error) {
       console.error(error)
     }
