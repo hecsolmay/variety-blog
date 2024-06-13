@@ -3,7 +3,6 @@ import { H1 } from '@/components/common/headings'
 import { ListOfPostsFallback } from '@/components/fallbacks/post'
 import { ListOfPosts } from '@/components/posts/lists'
 import { categories } from '@/constants/categories'
-import { getPosts } from '@/controllers/posts'
 import { ServerPageProps } from '@/types/props'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
@@ -19,8 +18,6 @@ export default async function CategoryPage ({
   if (!categoryFound) {
     redirect('/404')
   }
-
-  const response = await getPosts({ ...searchParams, categoryId: id })
 
   return (
     <MainContainer>
