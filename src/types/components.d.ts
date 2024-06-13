@@ -11,3 +11,9 @@ export interface LabelProps extends React.HTMLAttributes<HTMLLabelElement> {}
 export interface SpanProps extends React.HTMLAttributes<HTMLSpanElement> {}
 export interface MainProps extends React.HTMLAttributes<HTMLMainElement> {}
 export interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {}
+
+export interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  register?: any
+  error?: string
+  hasError?: boolean
+}
