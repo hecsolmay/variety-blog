@@ -34,3 +34,17 @@ export function formatTitleSlug (title: string) {
     .replace(/[\s_-]+/g, '-')
     .replace(/^-+|-+$/g, '')
 }
+
+export function formatCommentDate (date: Date) {
+  // With time
+  const dateString = date.toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true
+  })
+
+  return dateString
+}
