@@ -1,16 +1,23 @@
 'use client'
 
+import { createComment } from '@/actions/comments'
 import Button from '@/components/common/button'
 import TextArea from '@/components/common/textarea'
 import { CommentInput, commentSchema } from '@/schemas/comments'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
-export default function CommentForm () {
+interface CommentFormProps {
+  postId: string
+}
+
+export default function CommentForm ({ postId }:CommentFormProps) {
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
+    reset
   } = useForm<CommentInput>({
     defaultValues: {
       content: ''
@@ -19,7 +26,12 @@ export default function CommentForm () {
   })
 
   const onSubmit = async (data: CommentInput) => {
-    // TODO: send comment
+    try {
+      await createComment({ ...data, postId })
+      reset()
+    } catch (error) {
+      toast.error('Error al enviar el comentario')
+    }
   }
 
   return (
