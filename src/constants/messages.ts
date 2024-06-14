@@ -9,7 +9,9 @@ export const MESSAGES = {
   PASSWORD_CONFIRMATION: 'Las contraseñas no coinciden',
   USERNAME_ALREADY_EXISTS: 'El nombre de usuario ya existe',
   EMAIL_ALREADY_EXISTS: 'El email ya existe',
-  NO_EMPTY_FIELDS: 'El campo no puede estar vacío'
+  NO_EMPTY_FIELDS: 'El campo no puede estar vacío',
+  MIN_COMMENT_LENGTH: 'El comentario debe tener al menos 10 caracteres',
+  MAX_COMMENT_LENGTH: 'El comentario debe tener menos de 250 caracteres'
 } as const
 
 export const DEFAULT_STRING_MESSAGE = {

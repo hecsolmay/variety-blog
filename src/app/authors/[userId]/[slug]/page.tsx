@@ -4,6 +4,7 @@ import { H1 } from '@/components/common/headings'
 import CommentsSection from '@/components/sections/comments'
 import { getOnePost } from '@/controllers/posts'
 import { ServerPageProps } from '@/types/props'
+import { getSession } from '@/utils/auth'
 import { formatPostDate } from '@/utils/format'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -23,6 +24,8 @@ export default async function PostPage ({ params }: ServerPageProps) {
   if (post === null) {
     redirect('/not-found')
   }
+
+  const session = await getSession()
 
   const { title, coverImage, author, categories, images } = post
 
@@ -84,7 +87,7 @@ export default async function PostPage ({ params }: ServerPageProps) {
 
       {categories.length > 0 && (
         <ul className='mt-6 flex flex-wrap gap-4 pb-8'>
-          {categories.map((category) => (
+          {categories.map(category => (
             <Link key={category.id} href={`/categories/${category.id}`}>
               <Badge variant='default'>{category.name}</Badge>
             </Link>
@@ -92,7 +95,11 @@ export default async function PostPage ({ params }: ServerPageProps) {
         </ul>
       )}
 
-      <CommentsSection postId={post.id} commentsCount={post.commentsCount} />
+      <CommentsSection
+        postId={post.id}
+        commentsCount={post.commentsCount}
+        isUserLoggedIn={!!session}
+      />
     </MainContainer>
   )
 }
