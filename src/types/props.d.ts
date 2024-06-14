@@ -8,6 +8,7 @@ interface SearchParams {
   userId?: string
   slug?: string
   next?: string
+  postId?: string
 }
 
 interface Params {
