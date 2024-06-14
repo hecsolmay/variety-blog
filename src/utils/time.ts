@@ -21,7 +21,7 @@ function getUnitAndValueDate  (secondsElapsed: number)  {
 }
 
 export function getTimeAgo (date: Date) {
-  const rtf = new Intl.RelativeTimeFormat()
+  const rtf = new Intl.RelativeTimeFormat('es')
 
   const timestamp = date.getTime()
 

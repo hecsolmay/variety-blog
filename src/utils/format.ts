@@ -2,7 +2,7 @@ import { DEFAULT_PAGINATION } from '@/constants'
 import { paginationSchema } from '@/schemas/pagination'
 
 export function formatPostDate (date: Date) {
-  const dateString = date.toLocaleDateString('es-ES', {
+  const dateString = date.toLocaleDateString('es-MX', {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
@@ -37,7 +37,7 @@ export function formatTitleSlug (title: string) {
 
 export function formatCommentDate (date: Date) {
   // With time
-  const dateString = date.toLocaleDateString('es-ES', {
+  const dateString = date.toLocaleDateString('es-MX', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
