@@ -17,3 +17,4 @@ export interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextArea
   error?: string
   hasError?: boolean
 }
+export interface DivProps extends React.HTMLAttributes<HTMLDivElement> {}

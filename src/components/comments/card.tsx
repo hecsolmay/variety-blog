@@ -29,7 +29,7 @@ export function CommentCard ({ comment }: CommentCardProps) {
         </div>
       </div>
 
-      <p className='mt-4 w-full whitespace-pre-line text-balance text-primary opacity-90'>
+      <p className='w-full whitespace-pre-line text-balance text-primary opacity-90'>
         {comment.content}
       </p>
     </>

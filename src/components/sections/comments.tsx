@@ -1,6 +1,8 @@
 import CommentForm from '@/components/comments/form'
 import { CommentsList } from '@/components/comments/lists'
 import { RedirectToLogin } from '@/components/common/redirect'
+import { FallbackLoadingComments } from '@/components/fallbacks/comments'
+import { Suspense } from 'react'
 
 interface CommentsSectionProps {
   postId: string
@@ -14,7 +16,9 @@ export default function CommentsSection ({ postId, commentsCount, isUserLoggedIn
       <h1 className='text-xl font-bold text-primary'>Comentarios {`(${commentsCount})`}</h1>
       {isUserLoggedIn && <CommentForm postId={postId} />}
       {!isUserLoggedIn && <RedirectToLogin className='my-4'>Inicia sesión para comentar</RedirectToLogin>}
-      <CommentsList postId={postId} />
+      <Suspense fallback={<FallbackLoadingComments />}>
+        <CommentsList postId={postId} />
+      </Suspense>
     </section>
   )
 }

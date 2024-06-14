@@ -1,6 +1,6 @@
 'use server'
 
-import { createComment as createCommentController } from '@/controllers/comments'
+import { createComment as createCommentController, getComments } from '@/controllers/comments'
 import { getSession } from '@/utils/auth'
 import { revalidateTag } from 'next/cache'
 
@@ -24,4 +24,22 @@ export async function createComment (data: CreateCommentInput) {
 
   revalidateTag('comments')
   return createdComment.comment
+}
+
+interface GetCommentsParams {
+  page?: number
+  limit?: number
+  postId: string
+}
+
+export async function getCommentsAction (params: GetCommentsParams) {
+  const { page = 1, limit = 10, postId } = params
+
+  const result = await getComments({
+    postId,
+    page: page.toString(),
+    limit: limit.toString()
+  })
+
+  return result
 }

@@ -21,3 +21,12 @@ export interface ServerPageProps {
   searchParams: SearchParams
   params: Params
 }
+
+export interface Pagination {
+  currentPage: number
+  limit: number
+  total: number
+  pages: number
+  hasNext: boolean
+  hasPrev: boolean
+}
