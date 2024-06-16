@@ -68,7 +68,7 @@ export function CreatePostForm () {
 
   const handleSingleFileChange = async (file?: File) => {
     try {
-      const res = await uploadFile(file, { temporary: true })
+      const res = await uploadFile(file)
 
       if (res === undefined) return
 
@@ -205,11 +205,13 @@ export function UpdatePostForm ({ post }: UpdatePostFormProps) {
   )
   const [images, setImages] = useState<string[]>(post.images.map(i => i.url))
 
-  const { uploadFile, isUploading, file, progress, setFile } = useFileUpload()
+  const { uploadFile, isUploading, progress, setFile } = useFileUpload()
   const {
     isUploading: newIsUploading,
     progress: newProgress,
-    uploadFile: newUploadFile
+    uploadFile: newUploadFile,
+    file: newFile,
+    setFile: setNewFile
   } = useFileUpload()
   const [indexUploading, setIndexUploading] = useState(0)
   const [selectedCategories, setSelectedCategories] = useState<OptionType[]>(
@@ -227,7 +229,7 @@ export function UpdatePostForm ({ post }: UpdatePostFormProps) {
     try {
       const formattedCategories = selectedCategories.map(c => c.value)
 
-      await updatePost(post.id,{
+      await updatePost(post.id, {
         ...data,
         coverImage,
         images,
@@ -256,13 +258,13 @@ export function UpdatePostForm ({ post }: UpdatePostFormProps) {
     if (file === undefined) return
 
     try {
-      const res = await uploadFile(file)
+      const res = await newUploadFile(file)
       if (res === undefined) return
 
       if (res.url === undefined) return
 
       setImages([...images, res.url])
-      setFile(undefined)
+      setNewFile(undefined)
     } catch (error) {
       toast.error('Error al subir la imagen')
     }
@@ -350,17 +352,17 @@ export function UpdatePostForm ({ post }: UpdatePostFormProps) {
             </div>
           ))}
           {!hasMaxFiles && (
-            <div className='relative size-52'>
+            <div className='relative grid size-52 place-items-center'>
               <SingleImageDropzoneUsage
                 onChange={handleMultipleFileChange}
-                value={file}
-                disabled={isUploading}
+                value={newFile}
+                disabled={newIsUploading}
                 width={156}
                 className={'h-full min-w-[200px]'}
               />
-              {isUploading && (
-                <div className='absolute inset-0 flex items-center justify-center bg-black/50'>
-                  {progress}%
+              {newIsUploading && (
+                <div className='absolute inset-0 flex items-center justify-center rounded-lg bg-black/50'>
+                  {newProgress}%
                 </div>
               )}
             </div>
